@@ -53,7 +53,7 @@ class wiki_orm extends orm
 	public function treeToUL($tree, $parent = 0)
 	{
 		ob_start();
-		echo '<ul id="wiki_tree">';
+		echo '<ul class="efvlist" id="wiki_tree">';
 		foreach($tree[$parent] as $id => $row)
 		{
 			echo '<li><a href="%appurl%byid/'.$id.'">'.$row['alias'].'</a>';

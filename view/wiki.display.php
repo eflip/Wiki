@@ -1,14 +1,15 @@
 <div style="margin-right: 300px;">
 	<?php
 
-	echo '<h3 style="margin-top:0">';
+
+//	echo '<h3 style="margin-top:0">';
 	if($wiki['parent'] != 0)
-		echo '<a href="%appurl%byid/'.$wiki['parent'].'">'.wiki_orm::idToTitle($wiki['parent']).'</a> > ';
+		echo 'Back to <a href="%appurl%byid/'.$wiki['parent'].'">'.wiki_orm::idToTitle($wiki['parent']).'</a>';
 	else
-		echo '<a href="%appurl%index">Index</a> > ';
+		echo 'Back to <a href="%appurl%index">Index</a>';
 
 
-	echo '<a href="?">'.$wiki['title'].'</a></h3>';
+	echo '<h2><a href="?">'.$wiki['title'].'</a></h2>';
 
 
 	/*
@@ -26,8 +27,12 @@
 		endforeach;
 
 	}*/
+	
+	include 'lib/Parsedown/Parsedown.php';
+	$Parsedown = new Parsedown();
 
-	echo $wiki['content'];
+	echo $Parsedown->text($wiki['content']); 
+	//echo $wiki['content'];
 
 	?>
 </div>
