@@ -6,14 +6,25 @@ class wiki extends app
 	
 	public function init($args)
 	{
-		$wikis = wiki_orm::index();
-		include 'view/wiki.main.php';
+		//$customSidebar = orm::qWiki('wiki');
+		
+		
 	}
+	
+	public function sidebar()
+	{
+		
+		
+		$wikis = wiki_orm::index();
+		include 'view/wiki.sidebar.php';
+	}	
 	
 	public function main($args)
 	{
 		// Get root wiki, link to all [[SubWikis]] linked within.
 		//$wiki = wiki_orm::getroot();
+		
+		
 				
 		return $this->byid(array('lolz', $this->ini));
 		/*
