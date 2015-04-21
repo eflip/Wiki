@@ -3,42 +3,27 @@
 
 class wiki_admin extends app
 {
-	public $table = 'wiki_pages';
-	
 	public function main($args)
 	{
-		// print heirarchy
-		$wikis = wiki_orm::index();
+		if(isset($this->lf->vars[0]) && $this->lf->vars[0] != 'main')
+			return $this->editbyalias($this->lf->vars[0]);
+		
+		$wikis = (new wikiModel)->getTree();
 		include 'view/wiki_admin.index.php';
 	}
 	
 	public function edit($args)
 	{
 		// Get root wiki, link to all [[SubWikis]] linked within.
-		$wiki = wiki_orm::getroot();
+		$wiki = (new wikiModel)->getroot();
 		
-		//$wiki = wiki_orm::getorphaned();
-		
-		$inc = "new";
-		if($wiki != array())
-		{
-			$inc = "edit";
-			$sub_wikis = wiki_orm::parse($wiki['content']);
-		}
-		
-		include "view/wiki_admin.$inc.php";
-	}
-	
-	// Get wiki by name, link to all [[SubWikis]] linked within.
-	public function editbyalias($args)
-	{
-		$wiki = wiki_orm::getbyalias(urldecode($args[1]));
+		//$wiki = (new wikiModel)->getorphaned();
 		
 		$inc = "new";
 		if($wiki != array())
 		{
 			$inc = "edit";
-			$sub_wikis = wiki_orm::parse($wiki['content']);
+			$sub_wikis = (new wikiModel)->parse($wiki['content']);
 		}
 		
 		include "view/wiki_admin.$inc.php";
@@ -49,16 +34,30 @@ class wiki_admin extends app
 		$this->editbyid($args);
 	}
 	
-	public function editbyid($args)
+	private function editbyalias($alias)
 	{
-		if(!isset($args[1])) $args[1] = 0;
-		$wiki = wiki_orm::getbyid(intval($args[1]));
+		$wiki = (new wikiModel)->getbyalias($alias);
 		
 		$inc = "new";
 		if($wiki != array())
 		{
 			$inc = "edit";
-			$sub_wikis = wiki_orm::parse($wiki['content']);
+			$sub_wikis = (new wikiModel)->parse($wiki['content']);
+		}
+		
+		include "view/wiki_admin.$inc.php";
+	}
+	
+	public function editbyid($args)
+	{
+		if(!isset($args[1])) $args[1] = 0;
+		$wiki = (new wikiModel)->getbyid(intval($args[1]));
+		
+		$inc = "new";
+		if($wiki != array())
+		{
+			$inc = "edit";
+			$sub_wikis = (new wikiModel)->parse($wiki['content']);
 		}
 		
 		include "view/wiki_admin.$inc.php";
@@ -68,21 +67,21 @@ class wiki_admin extends app
 	{
 		$id = intval($args[1]);
 		if(count($_POST) > 0)
-			wiki_orm::savepage($id, $_POST);
+			(new wikiModel)->savepage($id, $_POST);
 			
 		redirect302();
 	}
 	
 	/*public function edit($args)
 	{
-		$page = wiki_orm::getpage($id);
+		$page = (new wikiModel)->getpage($id);
 		
 		include 'view/wiki_admin.edit.php';
 	}*/
 	
 	public function rm($args)
 	{
-		wiki_orm::rmpage(intval($args[1]));
+		(new wikiModel)->rmpage(intval($args[1]));
 		redirect302($this->lf->appurl.'index');
 	}
 	
@@ -90,7 +89,7 @@ class wiki_admin extends app
 	{		
 		if(count($_POST) > 0)
 		{
-			$name = wiki_orm::addpage($_POST);
+			$name = (new wikiModel)->addpage($_POST);
 			redirect302($this->lf->appurl.'editbyid/'.$name);
 		}
 		

@@ -28,7 +28,7 @@
 
 		}*/
 		
-		include 'lib/Parsedown/Parsedown.php';
+		include LF.'system/lib/3rdparty/parsedown/Parsedown.php';
 		$Parsedown = new Parsedown();
 
 		echo $Parsedown->text($wiki['content']); 

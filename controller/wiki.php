@@ -1,40 +1,44 @@
 <?php
 
 class wiki extends app
-{
-	public $table = 'wiki_pages';
+{	
 	
-	public function init($args)
-	{
-		//$customSidebar = orm::qWiki('wiki');
-		
-		
-	}
-	
-	public function sidebar()
-	{
-		
-		
-		$wikis = wiki_orm::index();
-		include 'view/wiki.sidebar.php';
-	}	
-	
-	public function main($args)
+	public function main()
 	{
 		// Get root wiki, link to all [[SubWikis]] linked within.
-		//$wiki = wiki_orm::getroot();
+		//$wiki = (new wikiModel)->getroot();
+		
+		if(isset($this->lf->vars[0]) && $this->lf->vars[0] != 'main')
+		{
+			$alias = $this->lf->vars[0];
+			$wiki = (new wikiModel)->byAlias($alias)->get();
+			include 'view/wiki.main.php';
+		}
+		else 
+		{
+			echo '<h2>Wiki Index</h2>';
+			echo (new wikiModel)->getTree();
+		}
+		
+		
+		
+		
 		
 		
 				
-		return $this->byid(array('lolz', $this->ini));
+		//return $this->byid(array('lolz', $this->ini));
+		
+		
+		
+		
 		/*
-		//$wiki = wiki_orm::getorphaned();
+		//$wiki = (new wikiModel)->getorphaned();
 		
 		$inc = "404";
 		if($wiki != array())
 		{
 			$inc = "display";
-			$sub_wikis = wiki_orm::parse($wiki['content']);
+			$sub_wikis = (new wikiModel)->parse($wiki['content']);
 			
 			foreach($sub_wikis as $subwiki)
 			{
@@ -49,26 +53,40 @@ class wiki extends app
 		include "view/wiki.$inc.php";*/
 	}
 	
+	public function sidebar()
+	{
+		$wikis = (new wikiModel)->getTree();
+		include 'view/wiki.sidebar.php';
+	}	
+	
+	public function wikiLinks($content)
+	{
+		$sub_wikis = (new wikiModel)->parse($content);
+			
+		foreach($sub_wikis as $subwiki)
+		{
+			$content = str_replace(
+				'[['.$subwiki.']]', 
+				'<a href="%appurl%'.urlencode($subwiki).'">'.$subwiki.'</a>', 
+				$content
+			);
+		}
+		
+		return $content;
+	}
+	
 	public function byname($args)
 	{
 		// Get root wiki, link to all [[SubWikis]] linked within.
-		$wiki = wiki_orm::getbyalias(urldecode($args[1]));
+		$wiki = (new wikiModel)->getbyalias(urldecode($args[1]));
 		
-		//$wiki = wiki_orm::getorphaned();
+		//$wiki = (new wikiModel)->getorphaned();
 		
 		$inc = "404";
 		if($wiki != array())
 		{
-			$inc = "display";
-			$sub_wikis = wiki_orm::parse($wiki['content']);
-			
-			foreach($sub_wikis as $subwiki)
-			{
-				$wiki['content']= str_replace(
-					'[['.$subwiki.']]', 
-					'<a href="%appurl%byname/'.urlencode($subwiki).'">'.$subwiki.'</a>', 
-					$wiki['content']);
-			}
+			$inc = "main";
+			$wiki['content'] = $this->wikiLinks($wiki['content']);
 		}
 		
 		include "view/wiki.$inc.php";
@@ -77,23 +95,15 @@ class wiki extends app
 	public function byid($args)
 	{
 		// Get root wiki, link to all [[SubWikis]] linked within.
-		$wiki = wiki_orm::getbyid(intval($args[1]));
+		$wiki = (new wikiModel)->getbyid(intval($args[1]));
 		
-		//$wiki = wiki_orm::getorphaned();
+		//$wiki = (new wikiModel)->getorphaned();
 		
 		$inc = "404";
 		if($wiki != array())
 		{
-			$inc = "display";
-			$sub_wikis = wiki_orm::parse($wiki['content']);
-			
-			foreach($sub_wikis as $subwiki)
-			{
-				$wiki['content']= str_replace(
-					'[['.$subwiki.']]', 
-					'<a href="%appurl%byname/'.urlencode($subwiki).'">'.$subwiki.'</a>', 
-					$wiki['content']);
-			}
+			$inc = "main";
+			$wiki['content'] = $this->wikiLinks($wiki['content']);
 		}
 		
 		include "view/wiki.$inc.php";

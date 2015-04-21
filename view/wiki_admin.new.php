@@ -5,43 +5,37 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 <br />
 <?php endif; ?>
 
-<form class="wiki_edit_article" action="%appurl%newwiki" method="post">		
+<form class="wiki_edit_article" action="%baseurl%apps/wiki/newwiki/" method="post">		
 	
 	
 	<div class="row no_martop">
 		<div class="col-9">
-			Title <input style="font-size: 24px; width: 100%; padding: 5px; margin-bottom: 5px;" class="dark_b" name="title" value="<?=urldecode($args[1]);?>" />
-			
-			
-			
+			Title <input style="font-size: 24px; width: 100%; padding: 5px; margin-bottom: 5px;" class="dark_b"  placeholder="Wiki page title" name="title" value="<?=ucfirst($this->lf->vars[0]);?>" />
 			
 			<div class="row">
 				<div class="col-6">
 					Parent
 					<select name="parent" id="">
 						<?php ob_start(); ?>
-				
+						
 						 <option value="0">-- Index --</option>
 						
 						<?php
 						
-						echo wiki_orm::selectparent();
+						echo (new wikiModel)->selectparent();
 						
-						/*if(wiki_orm::idToAlias($wiki['parent']))
-							echo '<option value="'.$wiki['parent'].'">'
-								.wiki_orm::idToAlias($wiki['parent']).'</option>';
-						*/
+						echo str_replace('value="'.$wiki['parent'].'"', 'selected="selected" value="'.$wiki['parent'].'"', ob_get_clean());
 						
 						?>
 					</select>
 				</div>
 				<div class="col-6">
 					Alias:
-			<input name="alias" placeholder="New Wiki Title" value="<?=urldecode($args[1]);?>" />
+					<input name="alias" value="<?=$this->lf->vars[0];?>" placeholder="Wiki Alias" />
 				</div>
 			</div>
 			
-			<textarea placeholder="Wiki text" style="width:100%; height: 400px" id="ckeditor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
+			<textarea placeholder="Wiki page contents go here" style="width:100%; height: 400px" id="ckeditor" name="content"></textarea>
 			
 			<input type="submit" class="martop green" value="Save Page" /> <?=isset($msg)?$msg:'';?>
 			
@@ -51,14 +45,7 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 			<h4>Linked</h4>
 				
 			<ol class="fvlist">
-				<?php if($sub_wikis != null)
-					foreach($sub_wikis as $subwiki): ?>
-				<li>
-					<a href="%appurl%editbyalias/<?=urlencode($subwiki);?>/from/<?=$wiki['id'];?>"><?=$subwiki;?></a>
-				</li>
-				<?php endforeach;
-					else
-					echo '<li>No subwikis found. Add [[this]] or [[that]] to your page.</li>'; ?>
+				<li>No subwikis found. Add [[this]] or [[that]] to your page.</li>
 			</ol>
 		</div>
 	</div>

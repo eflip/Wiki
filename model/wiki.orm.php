@@ -1,4 +1,4 @@
-<?php
+<?php //deprecated
 
 class wiki_orm extends orm
 {
@@ -37,7 +37,6 @@ class wiki_orm extends orm
 		$result = wiki_orm::q()->cols('title')->filterByid($id)->first();
 		return $result['title'];
 	}
-	
 	
 	public function index($parent = 0)
 	{

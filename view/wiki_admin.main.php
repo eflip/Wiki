@@ -26,5 +26,5 @@
 		</ol>
 		<textarea id="ckeditor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
 	</form>
-	<?php readfile(ROOT.'system/lib/editor.js'); ?>
+	<?php /* readfile(ROOT.'system/lib/editor.js'); */ ?>
 </div>

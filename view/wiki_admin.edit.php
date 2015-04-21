@@ -25,7 +25,7 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 						
 						<?php
 						
-						echo wiki_orm::selectparent();
+						echo (new wikiModel)->selectparent();
 						
 						echo str_replace('value="'.$wiki['parent'].'"', 'selected="selected" value="'.$wiki['parent'].'"', ob_get_clean());
 						
@@ -51,7 +51,7 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 				<?php if($sub_wikis != null)
 					foreach($sub_wikis as $subwiki): ?>
 				<li>
-					<a href="%appurl%editbyalias/<?=urlencode($subwiki);?>/from/<?=$wiki['id'];?>"><?=$subwiki;?></a>
+					<a href="%appurl%<?=urlencode($subwiki);?>/from/<?=$wiki['id'];?>"><?=$subwiki;?></a>
 				</li>
 				<?php endforeach;
 					else
