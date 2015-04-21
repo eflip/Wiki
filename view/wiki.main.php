@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-9">
 		<?php
-
+		
 		if($wiki['parent'] != 0)
 			echo 'Back to <a href="%appurl%byid/'.$wiki['parent'].'">'.(new wikiModel)->idToTitle($wiki['parent']).'</a>';
 		else

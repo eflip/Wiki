@@ -8,18 +8,39 @@ class wiki extends app
 		// Get root wiki, link to all [[SubWikis]] linked within.
 		//$wiki = (new wikiModel)->getroot();
 		
-		if(isset($this->lf->vars[0]) && $this->lf->vars[0] != 'main')
+		
+		
+		// if vars = array()
+		// show index tree or ini if not ''
+		
+		// if vars = array('notapage')
+		// return 'missing entry'
+		
+		// if vars = array('totallyapage')
+		// return entry
+		
+		if(!isset($this->lf->vars[0]))			
 		{
-			$alias = $this->lf->vars[0];
-			$wiki = (new wikiModel)->byAlias($alias)->get();
-			include 'view/wiki.main.php';
-		}
-		else 
-		{
+			if($this->ini != '')
+			{
+				$wiki = (new wikiModel)->byId($this->ini)->get();
+				include 'view/wiki.main.php';
+				return;
+			}
+		
 			echo '<h2>Wiki Index</h2>';
 			echo (new wikiModel)->getTree();
 		}
-		
+		else
+		{
+			$alias = $this->lf->vars[0];
+			$wiki = (new wikiModel)->byAlias(urldecode($alias))->get();
+			
+			if(!$wiki)
+				$wiki = (new wikiModel)->setTitle('Not found');
+			
+			include 'view/wiki.main.php';
+		}
 		
 		
 		

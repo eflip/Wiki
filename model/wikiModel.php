@@ -21,7 +21,7 @@ class wikiModel extends orm
 		echo '<ul class="efvlist" id="wiki_tree">';
 		foreach($tree[$parent] as $id => $row)
 		{
-			echo '<li><a href="%appurl%'.$row['alias'].'">'.$row['alias'].'</a>';
+			echo '<li><a href="%appurl%'.urlencode($row['alias']).'">'.$row['alias'].'</a>';
 			if(isset($tree[$id]))
 				echo $this->treeToUL($tree, $id);
 			echo '</li>';
