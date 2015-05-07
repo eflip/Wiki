@@ -8,8 +8,6 @@ class wiki extends app
 		// Get root wiki, link to all [[SubWikis]] linked within.
 		//$wiki = (new wikiModel)->getroot();
 		
-		
-		
 		// if vars = array()
 		// show index tree or ini if not ''
 		
@@ -23,7 +21,7 @@ class wiki extends app
 		{
 			if($this->ini != '')
 			{
-				$wiki = (new wikiModel)->byId($this->ini)->get();
+				$wiki = (new wikiModel)->getById($this->ini);
 				include 'view/wiki.main.php';
 				return;
 			}
@@ -34,44 +32,13 @@ class wiki extends app
 		else
 		{
 			$alias = $this->lf->vars[0];
-			$wiki = (new wikiModel)->byAlias(urldecode($alias))->get();
+			$wiki = (new wikiModel)->getByAlias(urldecode($alias);
 			
 			if(!$wiki)
 				$wiki = (new wikiModel)->setTitle('Not found');
 			
 			include 'view/wiki.main.php';
 		}
-		
-		
-		
-		
-		
-				
-		//return $this->byid(array('lolz', $this->ini));
-		
-		
-		
-		
-		/*
-		//$wiki = (new wikiModel)->getorphaned();
-		
-		$inc = "404";
-		if($wiki != array())
-		{
-			$inc = "display";
-			$sub_wikis = (new wikiModel)->parse($wiki['content']);
-			
-			foreach($sub_wikis as $subwiki)
-			{
-				$wiki['content']= str_replace(
-					'[['.$subwiki.']]', 
-					'<a href="%appurl%byname/'.urlencode($subwiki).'">'.$subwiki.'</a>', 
-					$wiki['content']);
-			}
-			
-		}
-		
-		include "view/wiki.$inc.php";*/
 	}
 	
 	public function sidebar()
