@@ -29,13 +29,9 @@ class wiki_admin extends app
 		include "view/wiki_admin.$inc.php";
 	}
 	
-	public function byid($args)
-	{
-		$this->editbyid($args);
-	}
-	
 	private function editbyalias($alias)
 	{
+		$alias = urldecode($alias);
 		$wiki = (new wikiModel)->getbyalias($alias);
 		
 		$inc = "new";
@@ -46,6 +42,11 @@ class wiki_admin extends app
 		}
 		
 		include "view/wiki_admin.$inc.php";
+	}
+	
+	public function byid($args)
+	{
+		$this->editbyid($args);
 	}
 	
 	public function editbyid($args)
@@ -81,8 +82,11 @@ class wiki_admin extends app
 	
 	public function rm($args)
 	{
-		(new wikiModel)->rmpage(intval($args[1]));
-		redirect302($this->lf->appurl.'index');
+		$wiki = (new wikiModel)->byId(intval($args[1]))->delete();
+		//pre($args);
+		//pre($wiki);
+		//exit;
+		redirect302($this->lf->appurl);
 	}
 	
 	public function newwiki($args)

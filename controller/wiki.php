@@ -22,6 +22,7 @@ class wiki extends app
 			if($this->ini != '')
 			{
 				$wiki = (new wikiModel)->getById($this->ini);
+				
 				include 'view/wiki.main.php';
 				return;
 			}
@@ -32,10 +33,11 @@ class wiki extends app
 		else
 		{
 			$alias = $this->lf->vars[0];
-			$wiki = (new wikiModel)->getByAlias(urldecode($alias);
+			$wiki = (new wikiModel)->getByAlias(urldecode($alias));
 			
 			if(!$wiki)
-				$wiki = (new wikiModel)->setTitle('Not found');
+				return 'Bad ID';
+			//	$wiki = (new wikiModel)->setTitle('Not found');
 			
 			include 'view/wiki.main.php';
 		}
