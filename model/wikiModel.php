@@ -1,9 +1,7 @@
 <?php
 
-class wikiModel extends orm
+class wikiModel extends WikiPages
 {
-	protected $table = 'wiki_pages';
-	
 	public function getTree()
 	{
 		$tree = array();
@@ -37,12 +35,14 @@ class wikiModel extends orm
 	
 	public function getbyalias($name)
 	{
-		return $this->filterByalias($name)->first();
+		return (new WikiPages)->byAlias($name)->first();
+		
+		//return $this->filterByalias($name)->first();
 	}
 	
 	public function getbyid($id)
 	{
-		return $this->filterByid($id)->first();
+		return $this->byId($id)->first();
 	}
 	
 	public function parse($content)
