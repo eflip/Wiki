@@ -38,7 +38,9 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 				</div>
 			</div>
 			
-			<textarea style="width:100%; height: 400px" id="ckeditor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
+			<textarea style="width:100%; height: 400px" id="editor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
+			
+			<div id="editor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
 			
 			<input type="submit" class="martop green" value="Save Page" /> <?=isset($msg)?$msg:'';?>
 			
@@ -60,4 +62,34 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 		</div>
 	</div>
 </form>
-<?php /*readfile(ROOT.'system/lib/editor.js');*/ ?>
+<?php /*readfile(ROOT.'system/lib/editor.js');*/ 
+
+
+		$ext = 'html';
+
+?>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+$(document).ready(function(){
+	var editor = ace.edit("editor");
+	
+	editor.commands.addCommand({
+		name: "unfind",
+		bindKey: {
+			win: "Ctrl-F",
+			mac: "Command-F"
+		},
+		exec: function(editor, line) {
+			return false;
+		},
+		readOnly: true
+	})
+	
+	editor.setShowPrintMargin(false);
+	editor.setTheme("ace/theme/textmate");
+	editor.getSession().setMode("ace/mode/<?php echo $ext; ?>");
+	editor.focus(); //To focus the ace editor
+</script>
