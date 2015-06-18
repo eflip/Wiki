@@ -15,7 +15,7 @@ class wiki extends app
 		// return 'missing entry'
 		
 		// if vars = array('totallyapage')
-		// return entry
+		// return entry	
 		
 		if(!isset($this->lf->vars[0]))			
 		{
@@ -32,8 +32,9 @@ class wiki extends app
 		}
 		else
 		{
-			$alias = $this->lf->vars[0];
-			$wiki = (new wikiModel)->getByAlias(urldecode($alias));
+			$alias = urldecode($this->lf->vars[0]);
+			
+			$wiki = (new wikiModel)->getByAlias($alias);
 			
 			if(!$wiki)
 				return 'Bad ID';
