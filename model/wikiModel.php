@@ -16,7 +16,7 @@ class wikiModel extends WikiPages
 	public function treeToUL($tree, $parent = 0)
 	{
 		ob_start();
-		echo '<ul class="vlist">';
+		echo '<ul class="efvlist">';
 		foreach($tree[$parent] as $id => $row)
 		{
 			echo '<li><a href="%appurl%'.urlencode($row['alias']).'">'.$row['alias'].'</a>';

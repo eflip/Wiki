@@ -10,7 +10,7 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 	
 	<div class="row no_martop">
 		<div class="col-9">
-			Title <input style="font-size: 24px; width: 100%; padding: 5px; margin-bottom: 5px;" class="dark_b"  placeholder="Wiki page title" name="title" value="<?=ucfirst($this->lf->vars[0]);?>" />
+			Title <input style="font-size: 24px; width: 100%; padding: 5px; margin-bottom: 5px;" class="dark_b"  placeholder="Wiki page title" name="title" value="<?=ucfirst($alias);?>" />
 			
 			<div class="row">
 				<div class="col-6">
@@ -24,14 +24,18 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 						
 						echo (new wikiModel)->selectparent();
 						
-						echo str_replace('value="'.$wiki['parent'].'"', 'selected="selected" value="'.$wiki['parent'].'"', ob_get_clean());
+						if(isset($_GET['from']))
+						{
+							echo str_replace('value="'.$_GET['from'].'"', 'selected="selected" value="'.$_GET['from'].'"', ob_get_clean());
+						}
+						
 						
 						?>
 					</select>
 				</div>
 				<div class="col-6">
 					Alias:
-					<input name="alias" value="<?=$this->lf->vars[0];?>" placeholder="Wiki Alias" />
+					<input name="alias" value="<?=$alias;?>" placeholder="Wiki Alias" />
 				</div>
 			</div>
 			

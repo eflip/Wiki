@@ -10,14 +10,13 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 	
 	<div class="row no_martop">
 		<div class="col-9">
-			Title <input style="font-size: 24px; width: 100%; padding: 5px; margin-bottom: 5px;" class="dark_b" name="title" value="<?=htmlspecialchars($wiki['title'], ENT_QUOTES);?>" />
 			
 			
 			
 			
 			<div class="row">
 				<div class="col-6">
-					Parent
+					Parent Wiki
 					<select name="parent" id="">
 						<?php ob_start(); ?>
 						
@@ -33,18 +32,24 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 					</select>
 				</div>
 				<div class="col-6">
-					Alias:
-					<input name="alias" value="<?=htmlspecialchars($wiki['alias'], ENT_QUOTES);?>" placeholder="Wiki Alias" />
+					Site Title <input style="font-size: 24px; width: 100%; padding: 5px;" class="dark_b" name="title" value="<?=htmlspecialchars($wiki['title'], ENT_QUOTES);?>" />
+					<textarea id="content" name="content"><?=htmlentities($wiki['content']);?></textarea>
 				</div>
 			</div>
 			
-			<textarea style="width:100%; height: 400px" id="editor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
+			Wiki Title<input  style="font-size: 24px; width: 100%; padding: 5px;" class="marbot" name="alias" value="<?=htmlspecialchars($wiki['alias'], ENT_QUOTES);?>" placeholder="Wiki Alias" />			
+			Page Content (markdown supported) <div id="editor" class="dark_b"><?=htmlentities($wiki['content']);?></div>
 			
-			<div id="editor" name="content"><?=htmlspecialchars($wiki['content'], ENT_QUOTES);?></textarea>
+			<div class="row">
+				<div class="col-8">
+					<input type="submit" class="green" value="Save Page" /> <?=isset($msg)?$msg:'';?>
+				</div>
+				<div class="col-4">
+					<a <?=jsprompt('Are you sure you want to delete this?');?> class="red button" href="%appurl%rm/<?=$wiki['id'];?>/">Delete this wiki</a>
+				</div>
+			</div>
 			
-			<input type="submit" class="martop green" value="Save Page" /> <?=isset($msg)?$msg:'';?>
 			
-			<a <?=jsprompt('Are you sure you want to delete this?');?> class="x martop" href="%appurl%rm/<?=$wiki['id'];?>/">Delete this wiki</a>
 		</div>
 		<div class="col-3">
 			<h4>Linked</h4>
@@ -53,7 +58,7 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 				<?php if($sub_wikis != null)
 					foreach($sub_wikis as $subwiki): ?>
 				<li>
-					<a href="%appurl%<?=urlencode($subwiki);?>/from/<?=$wiki['id'];?>"><?=$subwiki;?></a>
+					<a href="%appurl%<?=urlencode($subwiki);?>?from=<?=$wiki['id'];?>"><?=$subwiki;?></a>
 				</li>
 				<?php endforeach;
 					else
@@ -62,34 +67,32 @@ Back to <a href="%appurl%byid/<?=$wiki['parent'];?>">Parent</a>
 		</div>
 	</div>
 </form>
-<?php /*readfile(ROOT.'system/lib/editor.js');*/ 
 
-
-		$ext = 'html';
-
-?>
-
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<style type="text/css" media="screen">
+	#editor { 
+		position: relative;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		height: <?=($linecount*16);?>px;
+	}
+</style>
 <script src="https://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
 $(document).ready(function(){
 	var editor = ace.edit("editor");
 	
-	editor.commands.addCommand({
-		name: "unfind",
-		bindKey: {
-			win: "Ctrl-F",
-			mac: "Command-F"
-		},
-		exec: function(editor, line) {
-			return false;
-		},
-		readOnly: true
-	})
-	
 	editor.setShowPrintMargin(false);
 	editor.setTheme("ace/theme/textmate");
-	editor.getSession().setMode("ace/mode/<?php echo $ext; ?>");
+	editor.getSession().setMode("ace/mode/html");
 	editor.focus(); //To focus the ace editor
+	
+	$("#content").hide();
+	
+	// ty SelçukDERE http://stackoverflow.com/a/23965289
+	editor.getSession().on("change", function () {
+        $("#content").val(editor.getSession().getValue());
+    });
+});
 </script>

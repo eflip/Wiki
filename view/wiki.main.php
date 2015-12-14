@@ -6,9 +6,6 @@
 			echo 'Back to <a href="%appurl%byid/'.$wiki['parent'].'">'.(new wikiModel)->idToTitle($wiki['parent']).'</a>';
 		else
 			echo 'Back to <a href="%appurl%">Index</a>';
-
-
-		echo '<h2><a href="?">'.$wiki['title'].'</a></h2>';
 		
 		include LF.'system/lib/3rdparty/parsedown/Parsedown.php';
 		$Parsedown = new Parsedown();

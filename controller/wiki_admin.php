@@ -26,6 +26,8 @@ class wiki_admin extends app
 			$sub_wikis = (new wikiModel)->parse($wiki['content']);
 		}
 		
+		$linecount = substr_count($wiki['content'], '\n') + 20;
+		
 		include "view/wiki_admin.$inc.php";
 	}
 	
@@ -40,6 +42,8 @@ class wiki_admin extends app
 			$inc = "edit";
 			$sub_wikis = (new wikiModel)->parse($wiki['content']);
 		}
+		
+		$linecount = substr_count($wiki['content'], '\n') + 20;
 		
 		include "view/wiki_admin.$inc.php";
 	}
@@ -60,6 +64,8 @@ class wiki_admin extends app
 			$inc = "edit";
 			$sub_wikis = (new wikiModel)->parse($wiki['content']);
 		}
+		
+		$linecount = substr_count($wiki['content'], '\n') + 20;
 		
 		include "view/wiki_admin.$inc.php";
 	}

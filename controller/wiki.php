@@ -17,12 +17,12 @@ class wiki extends app
 		// if vars = array('totallyapage')
 		// return entry	
 		
+			
 		if(!isset($this->lf->vars[0]))			
 		{
 			if($this->ini != '')
 			{
 				$wiki = (new wikiModel)->getById($this->ini);
-				
 				include 'view/wiki.main.php';
 				return;
 			}
@@ -36,10 +36,12 @@ class wiki extends app
 			
 			$wiki = (new wikiModel)->getByAlias($alias);
 			
-			if(!$wiki)
-				return 'Bad ID';
-			//	$wiki = (new wikiModel)->setTitle('Not found');
 			
+			$this->lf->settings['title'] = $wiki['title'];
+			
+			if(!$wiki)
+				return 'Wiki page "'.$alias.'" not found';
+			//	$wiki = (new wikiModel)->setTitle('Not found');
 			include 'view/wiki.main.php';
 		}
 	}
